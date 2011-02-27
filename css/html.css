@@ -1,0 +1,59 @@
+html {
+  margin-bottom: 1px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 180%;
+  background: url(../img/bg/body.jpg) repeat top left;
+  color: #6D6864;
+}
+
+h1, h2, h3, h4, h5, h6, p, dl {
+  margin: 0;
+  padding: 10px 0;
+}
+
+h1 {   
+  clear: both;
+  font: 400 1.0em georgia, serif;
+  color: #532406;  
+}
+
+h2 {
+  clear: both;
+  font: 400 1.0em georgia, serif;
+  color: #61804E;
+}
+
+.result {
+  font-size: 90%;
+}
+
+.users a:link,
+.users a:hover,
+.users a:visited {
+  font-size: 75%;
+  color: #ff0000;
+  background-color: #FFCCCC;
+}
+
+.timestamp {
+  font-size: 75%;
+  color: #999;
+}
+
+.footer {
+  font-size: small;
+  color: #888888;
+  font-style: italic;
+  text-align: right;
+  padding:2em 0px;
+}
