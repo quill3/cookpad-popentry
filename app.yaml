@@ -8,6 +8,9 @@ handlers:
   static_dir: css
 - url: /img
   static_dir: img
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
 - url: /get_hateb_entry
   script: get_hateb_entry.py
   login: admin
@@ -15,7 +18,7 @@ handlers:
   script: get_cookpad_recipe.py
   login: admin
 - url: /.*
-  script: mainpage.py
+  script: show_entry.py
 
 builtins:
 - datastore_admin: on
