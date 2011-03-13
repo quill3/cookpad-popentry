@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from google.appengine.api import urlfetch
+from google.appengine.api import images
 
 import re
 import datetime
@@ -57,12 +58,25 @@ def put_entry(row):
     query = datastores.Entries.gql('WHERE entry_url = :url',url=row['entry_url'])
     entry = query.get()
 
+#temporary removed
+#    if not entry.photo_url == row['photo_url']:
     entry.photo_url = row['photo_url']
+    entry.photo_image = get_resizedimage(row['photo_url'],100,100)
+#
+
     entry.description = row['description']
     entry.tsukurepo_count = row['tsukurepo_count']
     entry.category = row['category']
     entry.cookpad_checked_time = datetime.datetime.today()
     entry.put()
+
+
+def get_resizedimage(url,width,height):
+    image_url = 'http://' + url
+    get_image = urlfetch.fetch(image_url,deadline=10)
+
+    if get_image.status_code == 200:
+        return images.resize(get_image.content,width,height)
 
 
 if __name__ == "__main__":
@@ -81,5 +95,8 @@ if __name__ == "__main__":
 #           'photo_url': 'img6.cookpad.com/recipe/p/1889/858/5BAFC8617E9932B314D6A484BCA8AEDD.jpg?1273502049',
 #           'tsukurepo_count': 516,
 #           'description': u'ほげほげ',
-#           'entry_url': 'cookpad.com/recipe/1121500'}
+#           'entry_url': 'cookpad.com/recipe/252807'}
 #    put_entry(row)
+
+##unit test code : get_resizedimage method
+#    print get_resizedimage('img7.cookpad.com/recipe/p/373/786/D936E58B7B6230D5B65A2EE6CA1DE452.jpg?1292597022',100,100)

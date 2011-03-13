@@ -45,9 +45,28 @@ h2 {
   background-color: #FFCCCC;
 }
 
+.tkrps a:link,
+.tkrps a:hover,
+.tkrps a:visited {
+  font-size: 75%;
+  color: #A52A2A;
+  background-color: #F4A460;
+}
+
+.category {
+  font-size: 80%;
+  color: #000000;
+}
+
 .timestamp {
   font-size: 75%;
   color: #999;
+}
+
+.description {
+  font-size: 80%;
+  color: #000000;
+  line-height: 1.5;
 }
 
 .footer {

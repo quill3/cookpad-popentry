@@ -12,6 +12,7 @@ class Entries(db.Model):
     bukuma_count = db.IntegerProperty()
     hateb_added_date = db.DateTimeProperty()
     photo_url = db.StringProperty()
+    photo_image = db.BlobProperty()
     description = db.StringProperty()
     category = db.StringProperty()
     tsukurepo_count = db.IntegerProperty()

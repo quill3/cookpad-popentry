@@ -137,3 +137,11 @@
   background: #D9F5EC;
   border-top: 1px solid #BDEDDE;
 }
+
+img.left {
+	float: left; 
+	margin-right: 1em;
+	margin-bottom: 1em;
+}
+
+.clear_float { clear: both; }
