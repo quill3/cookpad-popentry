@@ -28,15 +28,22 @@
 					<br>
 					<span class="users"><strong><a href="http://b.hatena.ne.jp/entry/{{ entry.entry_url }}" target="_blank">{{ entry.bukuma_count }} users</a></strong></span>&nbsp;&nbsp;
 					<span class="tkrps"><strong><a href="http://{{ entry.entry_url }}#tsukurepo_container" target="_blank">{{ entry.tsukurepo_count }} tkrps</a></strong></span>&nbsp;&nbsp;
-					{% if entry.category %}
-					<span class="category">[{{ entry.category }}]</span>&nbsp;&nbsp;
+					{% if entry.largecategory %}
+					<span class="category">[{{ entry.largecategory.name }}]</span>
+					{% endif %}
+					{% if entry.smallcategory %}
+					<span class="category">({{ entry.smallcategory.name }})</span>&nbsp;&nbsp;
 					{% endif %}
 					<span class="timestamp">{{ entry.hateb_added_date|date:"Y/m/d" }}</span>
 					<br>
-					<p class="description"><img class="left" src='tn?key={{ entry.key }}'></img>{{ entry.description }}</p>
+					<p class="description">
+					{% if entry.photo_image %}
+					<img class="left" src='tn?key={{ entry.key }}'></img>
+					{% endif %}
+					{{ entry.description }}
+					</p>
 					<p class="clear_float"></p> 
 					<br>
-					
 				{% endfor %}
 					<div class="footer">
 						<img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Powered by Google App Engine" />

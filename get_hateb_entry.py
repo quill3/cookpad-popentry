@@ -53,7 +53,6 @@ def put_entry(row):
         entry.photo_url = ''
         entry.description = ''
         entry.tsukurepo_count = 0
-        entry.category = ''
         entry.cookpad_checked_time = datetime.datetime(2011,1,1)
         entry.put()
 
