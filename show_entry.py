@@ -6,18 +6,30 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 
 import os
+import datetime
+import re
 
 import datastores
 
+
 class MainPage(webapp.RequestHandler):
     def get(self):
-        query = datastores.Entries.gql('ORDER BY bukuma_count DESC')
-        fetched_entries = query.fetch(25)
+        inputparm = get_inputparm(self)
+        showparm = get_showparm()
+        checkedparm = check_parm(inputparm,showparm)
+        gqlsentence = make_gqlsentence(checkedparm)
 
-        template_values = { 'entries' : fetched_entries }
+        # self.response.out.write(gqlsentence)
+
+        query = datastores.Entries.gql(gqlsentence)
+        fetched_entries = query.fetch(25,int(checkedparm['offset']))
+
+        template_values = { 'entries' : fetched_entries,
+                                        'showparm' : showparm,
+                                        'inputparm' : checkedparm}
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, template_values))                                           
+        self.response.out.write(template.render(path, template_values))
 
 class ThumbNail (webapp.RequestHandler):
     def get(self):
@@ -27,6 +39,92 @@ class ThumbNail (webapp.RequestHandler):
             self.response.out.write(entry.photo_image)
         else:
             self.error(404)
+
+
+def get_inputparm(self):
+    inputparm = {}
+    for p in ['category','year','season','sort','offset']:
+        inputparm[p] = str(self.request.get(p))
+    return inputparm
+
+def get_showparm():
+    category1 = get_categorylist('1')
+    category2 = get_categorylist('2')
+
+    startyear = 2008
+    endyear = datetime.datetime.today().year + 1
+    year = [[str(y),str(y)] for y in range(startyear,endyear)]
+
+    season = [['spring',u'春'],['summer',u'夏'],['autumn',u'秋'],['winter',u'冬']]
+
+    sort = [['bukuma',u'ブクマ数順'],['tsukurepo',u'つくれぽ数順']]
+
+    return {'category1' : category1,
+                'category2' : category2,
+                'year' : year,
+                'season' : season,
+                'sort' : sort}
+
+def get_categorylist(kubun):
+    query = datastores.Categories.gql("WHERE category_kubun = '" + kubun + "' ORDER BY hit_count DESC")
+    fetched_categories = query.fetch(30)
+    return [[c.category_id,c.category_name] for c in fetched_categories]
+
+def check_parm(inputparm,showparm):
+    checkedparm = {}
+
+#デフォルト値
+    for p in ['category1_id','category2_id','category_name','year','season']:
+        checkedparm[p] = ""
+    checkedparm['sort'] = "bukuma"
+    checkedparm['offset'] = "0"
+
+    for k, v in inputparm.iteritems():
+        if v:
+            if k == 'category':
+#半角数字のみ
+                if not numeric_check(v):
+#存在チェック、区分と名称を取得、ヒット数をカウントアップ
+                    query = datastores.Categories.gql("WHERE category_id = '" + v + "'")
+                    category = query.get()
+                    if category:
+                        key = 'category' + category.category_kubun + '_id'
+                        checkedparm[key] = v
+                        checkedparm['category_name'] = category.category_name
+                        category.hit_count += 1
+                        category.put()
+            elif k == 'offset':
+#半角数字のみ
+                if not numeric_check(v):
+                    checkedparm[k] = v
+            else:
+#year,season,sortはshowparmと一致していること
+                for p in showparm[k]:
+                    if v == p[0]:
+                        checkedparm[k] = v
+                        break
+    return checkedparm
+
+def numeric_check(v):
+    pattern = re.compile(r'[^0-9]')
+    return pattern.search(v)
+
+def make_gqlsentence(parm):
+    gqlsentence = ""
+    i = 0
+    for p in ['category1_id','category2_id','year','season']:
+        if parm[p]:
+            if i == 0:
+                gqlsentence = gqlsentence + "WHERE "
+                i = 1
+            else:
+                gqlsentence = gqlsentence + "AND "
+            gqlsentence = gqlsentence + p + " = '" + parm[p] + "' "
+
+    gqlsentence = gqlsentence + "ORDER BY " + parm['sort'] + "_count DESC"
+
+    return gqlsentence
+
 
 application = webapp.WSGIApplication(
                                      [('/', MainPage),

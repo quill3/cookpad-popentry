@@ -42,29 +42,26 @@ def get_recipe(url):
 
         pattern = re.compile(r'<a href="/category/(.*?)">(.*?)</a>')
         parse_results4 = pattern.findall(get_result.content)
-        if not parse_results4:
-            parse_results4 = [('','')]
-
-        pattern = re.compile(r'<a href="/category/(.*?)\?class=tag">(.*?)</a>')
-        parse_results5 = pattern.findall(get_result.content)
-        if not parse_results5:
-            parse_results5 = [('','')]
+        for temp in range(3-len(parse_results4)):
+            parse_results4.append(('',''))
 
     else:
         parse_results1 = ['']
         parse_results2 = ['']
         parse_results3 = ['0']
-        parse_results4 = [('','')]
+        parse_results4 = [('',''),('',''),('','')]
         parse_results5 = [('','')]
 
     return {'entry_url':url,
             'photo_url':parse_results1[0],
             'description':unicode(parse_results2[0],'utf-8'),
             'tsukurepo_count':int(parse_results3[0]),
-            'largecategory_id':parse_results4[0][0],
-            'largecategory_name':unicode(parse_results4[0][1],'utf-8'),
-            'smallcategory_id':parse_results5[0][0],
-            'smallcategory_name':unicode(parse_results5[0][1],'utf-8')}
+            'category1_id':parse_results4[0][0].replace('?class=tag', ''),
+            'category1_name':unicode(parse_results4[0][1],'utf-8'),
+            'category2_id':parse_results4[1][0].replace('?class=tag', ''),
+            'category2_name':unicode(parse_results4[1][1],'utf-8'),
+            'category3_id':parse_results4[2][0].replace('?class=tag', ''),
+            'category3_name':unicode(parse_results4[2][1],'utf-8')}
 
 
 def put_entry(row):
@@ -78,10 +75,18 @@ def put_entry(row):
         entry.photo_image = get_resizedimage(row['photo_url'],100,100)
     entry.description = row['description']
     entry.tsukurepo_count = row['tsukurepo_count']
-    if row['largecategory_id']:
-        entry.largecategory = get_category(row['largecategory_id'],row['largecategory_name'],datastores.LargeCategories)
-    if row['smallcategory_id']:
-        entry.smallcategory = get_category(row['smallcategory_id'],row['smallcategory_name'],datastores.SmallCategories)
+    if row['category1_id']:
+        put_category(row['category1_id'],row['category1_name'],'1')
+        entry.category1_id = row['category1_id']
+        entry.category1_name = row['category1_name']
+    if row['category2_id']:
+        put_category(row['category2_id'],row['category2_name'],'2')
+        entry.category2_id = row['category2_id']
+        entry.category2_name = row['category2_name']
+    if row['category3_id']:
+        put_category(row['category3_id'],row['category3_name'],'3')
+        entry.category3_id = row['category3_id']
+        entry.category3_name = row['category3_name']
     entry.cookpad_checked_time = datetime.datetime.today()
     entry.put()
 
@@ -96,17 +101,17 @@ def get_resizedimage(url,width,height):
         return images.resize(get_image.content,width,height)
 
 
-def get_category(id,name,Categories):
-    query = Categories.gql('WHERE id = :id',id=id)
+def put_category(id,name,kubun):
+    query = datastores.Categories.gql('WHERE category_id = :id',id=id)
     category = query.get()
 
     if not category:
-        category = Categories()
-        category.id = id
-        category.name = name
+        category = datastores.Categories()
+        category.category_id = id
+        category.category_name = name
+        category.category_kubun = kubun
         category.hit_count = 0
         category.put()
-    return category
 
 
 if __name__ == "__main__":

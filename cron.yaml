@@ -4,4 +4,4 @@ cron:
   schedule: every 2 minutes
 - description: get_cookpad_recipe
   url: /get_cookpad_recipe
-  schedule: every 30 seconds
+  schedule: every 1 minutes

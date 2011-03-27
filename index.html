@@ -28,11 +28,11 @@
 					<br>
 					<span class="users"><strong><a href="http://b.hatena.ne.jp/entry/{{ entry.entry_url }}" target="_blank">{{ entry.bukuma_count }} users</a></strong></span>&nbsp;&nbsp;
 					<span class="tkrps"><strong><a href="http://{{ entry.entry_url }}#tsukurepo_container" target="_blank">{{ entry.tsukurepo_count }} tkrps</a></strong></span>&nbsp;&nbsp;
-					{% if entry.largecategory %}
-					<span class="category">[{{ entry.largecategory.name }}]</span>
+					{% if entry.category1_name %}
+					<span class="category">[{{ entry.category1_name }}]</span>
 					{% endif %}
-					{% if entry.smallcategory %}
-					<span class="category">({{ entry.smallcategory.name }})</span>&nbsp;&nbsp;
+					{% if entry.category2_name %}
+					<span class="category">({{ entry.category2_name }})</span>&nbsp;&nbsp;
 					{% endif %}
 					<span class="timestamp">{{ entry.hateb_added_date|date:"Y/m/d" }}</span>
 					<br>
