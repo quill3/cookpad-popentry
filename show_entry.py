@@ -57,7 +57,7 @@ def get_showparm():
 
     season = [['spring',u'春'],['summer',u'夏'],['autumn',u'秋'],['winter',u'冬']]
 
-    sort = [['bukuma',u'ブクマ数順'],['tsukurepo',u'つくれぽ数順']]
+    sort = [['bukuma_count',u'ブクマ数順'],['tsukurepo_count',u'つくれぽ数順'],['hateb_added_date',u'新着順']]
 
     return {'category1' : category1,
                 'category2' : category2,
@@ -76,38 +76,41 @@ def check_parm(inputparm,showparm):
 #デフォルト値
     for p in ['category1_id','category2_id','category_name','year','season']:
         checkedparm[p] = ""
-    checkedparm['sort'] = "bukuma"
+    checkedparm['sort'] = "bukuma_count"
     checkedparm['offset'] = "0"
 
     for k, v in inputparm.iteritems():
-        if v:
-            if k == 'category':
-#半角数字のみ
-                if not numeric_check(v):
-#存在チェック、区分と名称を取得、ヒット数をカウントアップ
-                    query = datastores.Categories.gql("WHERE category_id = '" + v + "'")
-                    category = query.get()
-                    if category:
-                        key = 'category' + category.category_kubun + '_id'
-                        checkedparm[key] = v
-                        checkedparm['category_name'] = category.category_name
-                        category.hit_count += 1
-                        category.put()
-            elif k == 'offset':
-#半角数字のみ
-                if not numeric_check(v):
-                    checkedparm[k] = v
-            else:
+        if k == 'category':
+#categoryは半角数字のみ
+            if is_num(v):
+#categoryの存在チェック、区分と名称を取得、ヒット数をカウントアップ
+                query = datastores.Categories.gql("WHERE category_id = '" + v + "'")
+                category = query.get()
+                if category:
+                    key = 'category' + category.category_kubun + '_id'
+                    checkedparm[key] = v
+                    checkedparm['category_name'] = category.category_name
+                    category.hit_count += 1
+                    category.put()
+        elif k == 'offset':
+#offsetは半角数字のみ
+            if is_num(v):
+                checkedparm[k] = v
+        else:
 #year,season,sortはshowparmと一致していること
-                for p in showparm[k]:
-                    if v == p[0]:
-                        checkedparm[k] = v
-                        break
+            for p in showparm[k]:
+                if v == p[0]:
+                    checkedparm[k] = v
+                    break
     return checkedparm
 
-def numeric_check(v):
+def is_num(v):
+    if not v:
+        return False
     pattern = re.compile(r'[^0-9]')
-    return pattern.search(v)
+    if pattern.search(v):
+        return False
+    return True
 
 def make_gqlsentence(parm):
     gqlsentence = ""
@@ -121,7 +124,7 @@ def make_gqlsentence(parm):
                 gqlsentence = gqlsentence + "AND "
             gqlsentence = gqlsentence + p + " = '" + parm[p] + "' "
 
-    gqlsentence = gqlsentence + "ORDER BY " + parm['sort'] + "_count DESC"
+    gqlsentence = gqlsentence + "ORDER BY " + parm['sort'] + " DESC"
 
     return gqlsentence
 
