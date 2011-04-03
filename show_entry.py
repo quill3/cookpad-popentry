@@ -17,16 +17,21 @@ class MainPage(webapp.RequestHandler):
         inputparm = get_inputparm(self)
         showparm = get_showparm()
         checkedparm = check_parm(inputparm,showparm)
+
         gqlsentence = make_gqlsentence(checkedparm)
-
-        # self.response.out.write(gqlsentence)
-
         query = datastores.Entries.gql(gqlsentence)
-        fetched_entries = query.fetch(25,int(checkedparm['offset']))
+
+        limit = 25
+        offset = int(checkedparm['offset'])
+        fetched_entries = query.fetch(limit,offset)
+
+        fetched_count = len(fetched_entries)
+        pager = make_pager(limit,offset,fetched_count)
 
         template_values = { 'entries' : fetched_entries,
                                         'showparm' : showparm,
-                                        'inputparm' : checkedparm}
+                                        'inputparm' : checkedparm,
+                                        'pager' : pager}
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
         self.response.out.write(template.render(path, template_values))
@@ -43,7 +48,7 @@ class ThumbNail (webapp.RequestHandler):
 
 def get_inputparm(self):
     inputparm = {}
-    for p in ['category','year','season','sort','offset']:
+    for p in ['category','year_or_season','sort','offset']:
         inputparm[p] = str(self.request.get(p))
     return inputparm
 
@@ -51,9 +56,9 @@ def get_showparm():
     category1 = get_categorylist('1')
     category2 = get_categorylist('2')
 
-    startyear = 2008
-    endyear = datetime.datetime.today().year + 1
-    year = [[str(y),str(y)] for y in range(startyear,endyear)]
+    startyear = 2007
+    endyear = datetime.datetime.today().year
+    year = [[str(y),str(y) + '年'] for y in range(endyear,startyear,-1)]
 
     season = [['spring',u'春'],['summer',u'夏'],['autumn',u'秋'],['winter',u'冬']]
 
@@ -67,7 +72,7 @@ def get_showparm():
 
 def get_categorylist(kubun):
     query = datastores.Categories.gql("WHERE category_kubun = '" + kubun + "' ORDER BY hit_count DESC")
-    fetched_categories = query.fetch(30)
+    fetched_categories = query.fetch(150)
     return [[c.category_id,c.category_name] for c in fetched_categories]
 
 def check_parm(inputparm,showparm):
@@ -92,16 +97,29 @@ def check_parm(inputparm,showparm):
                     checkedparm['category_name'] = category.category_name
                     category.hit_count += 1
                     category.put()
-        elif k == 'offset':
-#offsetは半角数字のみ
-            if is_num(v):
-                checkedparm[k] = v
-        else:
-#year,season,sortはshowparmと一致していること
+        elif k == 'sort':
+#sortはshowparmと一致していること
             for p in showparm[k]:
                 if v == p[0]:
                     checkedparm[k] = v
                     break
+        elif k == 'offset':
+#offsetは半角数字のみ
+            if is_num(v):
+                checkedparm[k] = v
+        elif k == 'year_or_season':
+#year,seasonはshowparmと一致していること
+            if is_num(v):
+                for p in showparm['year']:
+                    if v == p[0]:
+                        checkedparm['year'] = v
+                        break
+            else:
+                for p in showparm['season']:
+                    if v == p[0]:
+                        checkedparm['season'] = v
+                        break
+
     return checkedparm
 
 def is_num(v):
@@ -127,6 +145,14 @@ def make_gqlsentence(parm):
     gqlsentence = gqlsentence + "ORDER BY " + parm['sort'] + " DESC"
 
     return gqlsentence
+
+def make_pager(limit,offset,fetched_count):
+    pager = {'prev_offset':-1,'next_offset':-1}
+    if offset >= limit:
+        pager['prev_offset'] = offset - limit
+    if fetched_count >= limit:
+        pager['next_offset'] = offset + limit
+    return pager
 
 
 application = webapp.WSGIApplication(

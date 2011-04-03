@@ -19,7 +19,7 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="header">
-					<h1>Cookpad Pop Entry</h1>
+					<h1><a href="http://cookpad-popentry.appspot.com/">Cookpad Pop Entry</a></h1>
 					<h2><span class="highlight">クックパッドの人気レシピ集（自動更新中／条件指定検索可）</span></h2>
 					<br>
 					<a href="http://b.hatena.ne.jp/entry/http%3A%2F%2Fcookpad-popentry.appspot.com%2F" class="hatena-bookmark-button" data-hatena-bookmark-title="%E3%82%AF%E3%83%83%E3%82%AF%E3%83%91%E3%83%83%E3%83%89%E4%BA%BA%E6%B0%97%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
@@ -28,39 +28,48 @@
 				</div>
 				<div id="page">
 					<form method="get" action="">
-						カテゴリ：
+					<p class="search">
+						<span class="dgreen">カテゴリ</span>：
 						<select name="category">
-							<option value="">指定なし</option>
+							<optgroup label="指定なし">
+								<option value="">指定なし</option>
+							</optgroup>
+							<optgroup label="大きなカテゴリ">
 							{% for category1 in showparm.category1 %}
-							<option value="{{ category1.0 }}"{% ifequal category1.0 inputparm.category1_id %} selected{% endifequal %}>{{ category1.1 }}</option>
+								<option value="{{ category1.0 }}"{% ifequal category1.0 inputparm.category1_id %} selected{% endifequal %}>{{ category1.1 }}</option>
 							{% endfor %}
+							</optgroup>
+							<optgroup label="小さなカテゴリ">
 							{% for category2 in showparm.category2 %}
-							<option value="{{ category2.0 }}"{% ifequal category2.0 inputparm.category2_id %} selected{% endifequal %}>{{ category2.1 }}</option>
+								<option value="{{ category2.0 }}"{% ifequal category2.0 inputparm.category2_id %} selected{% endifequal %}>{{ category2.1 }}</option>
 							{% endfor %}
-						</select>&nbsp;&nbsp;
-						年代：
-						<select name="year">
-							<option value="">指定なし</option>
-							{% for year in showparm.year %}
-							<option value="{{ year.0 }}"{% ifequal year.0 inputparm.year %} selected{% endifequal %}>{{ year.1 }}</option>
-							{% endfor %}
+							</optgroup>
 						</select>
 						<br>
-						季節：
-						<select name="season">
-							<option value="">指定なし</option>
+						<span class="dgreen">期間　　</span>：
+						<select name="year_or_season">
+							<optgroup label="指定なし">
+								<option value="">指定なし</option>
+							</optgroup>
+							<optgroup label="季節">
 							{% for season in showparm.season %}
-							<option value="{{ season.0 }}"{% ifequal season.0 inputparm.season %} selected{% endifequal %}>{{ season.1 }}</option>
+								<option value="{{ season.0 }}"{% ifequal season.0 inputparm.season %} selected{% endifequal %}>{{ season.1 }}</option>
 							{% endfor %}
-						</select>&nbsp;&nbsp;
-						表示順：
-						<select name="sort">
-							{% for sort in showparm.sort %}
-							<option value="{{ sort.0 }}"{% ifequal sort.0 inputparm.sort %} selected{% endifequal %}>{{ sort.1 }}</option>
+							</optgroup>
+							<optgroup label="年代">
+							{% for year in showparm.year %}
+								<option value="{{ year.0 }}"{% ifequal year.0 inputparm.year %} selected{% endifequal %}>{{ year.1 }}</option>
 							{% endfor %}
+							</optgroup>
 						</select>
 						<br>
-						<input type="submit" value="検索">
+						<span class="dgreen">表示順　</span>：
+							{% for sort in showparm.sort %}
+								<input type="radio" name="sort" value="{{ sort.0 }}"{% ifequal sort.0 inputparm.sort %} checked{% endifequal %}>{{ sort.1 }}
+							{% endfor %}
+						<br>
+						<p class="searchbutton"><input type="submit" value="クックパッド人気エントリー検索"></p>
+					</p>
 					</form>
 				{% for entry in entries %}
 					<span class="result"><a href="http://{{ entry.entry_url }}" target="_blank">{{ entry.entry_title }}</a></span>
@@ -68,27 +77,44 @@
 					<span class="users"><strong><a href="http://b.hatena.ne.jp/entry/{{ entry.entry_url }}" target="_blank">{{ entry.bukuma_count }} users</a></strong></span>&nbsp;&nbsp;
 					<span class="tkrps"><strong><a href="http://{{ entry.entry_url }}#tsukurepo_container" target="_blank">{{ entry.tsukurepo_count }} tkrps</a></strong></span>&nbsp;&nbsp;
 					{% if entry.category1_name %}
-					<span class="category">[{{ entry.category1_name }}]</span>
+					<span class="category"><a href="?category={{ entry.category1_id }}&sort={{ inputparm.sort }}">[{{ entry.category1_name }}]</a></span>
 					{% endif %}
 					{% if entry.category2_name %}
-					<span class="category">({{ entry.category2_name }})</span>&nbsp;&nbsp;
+					<span class="category"><a href="?category={{ entry.category2_id }}&sort={{ inputparm.sort }}">({{ entry.category2_name }})</a></span>&nbsp;&nbsp;
 					{% endif %}
 					<span class="timestamp">{{ entry.hateb_added_date|date:"Y/m/d" }}</span>
 					<br>
 					<p class="description">
 					{% if entry.photo_image %}
-					<img class="left" src='tn?key={{ entry.key }}'></img>
+					<a href="http://{{ entry.entry_url }}" target="_blank">
+						<img class="left" src='tn?key={{ entry.key }}'  border="0"></img>
+					</a>
 					{% endif %}
 					{{ entry.description }}
 					</p>
 					<p class="clear_float"></p> 
 					<br>
 				{% endfor %}
+					<span class="floatLeft"><span class="pager">
+				{% ifnotequal pager.prev_offset -1 %}
+					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.prev_offset }}">
+						<=前のページヘ
+					</a>
+				{% endifnotequal %}
+					</span></span>
+					<span class="floatRight"><span class="pager">
+				{% ifnotequal pager.next_offset -1 %}
+					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.next_offset }}">
+						次のページヘ=>
+					</a>
+				{% endifnotequal %}
+					</span></span>
+					<p class="clear_float"></p> 
 					<div class="footer">
-						<a href="http://code.google.com/intl/ja/appengine/" target="_blank"><img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Powered by Google App Engine" /></a>
+						<a href="http://code.google.com/intl/ja/appengine/" target="_blank"><img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Powered by Google App Engine"  border="0"/></a>
 						<br>
 						このWebサービスは<a href="http://d.hatena.ne.jp/quill3/" target="_blank" >quill3</a>が趣味で作りました。
-						<br>
+
 						（<a href="http://github.com/quill3/cookpad-popentry" target="_blank" >ソースコード</a>と<a href="http://d.hatena.ne.jp/quill3/archive?word=%2A%5B%A5%AF%A5%C3%A5%AF%A5%D1%A5%C3%A5%C9%BF%CD%B5%A4%A5%A8%A5%F3%A5%C8%A5%EA%A1%BC%5D" target="_blank" >開発記録</a>を公開しています。）
 						<br>
 						姉妹サイトの<a href="http://2ch-hotentry.appspot.com/" target="_blank" >2chまとめホットエントリー</a>もよろしくお願いします。

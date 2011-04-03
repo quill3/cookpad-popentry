@@ -116,28 +116,3 @@ def put_category(id,name,kubun):
 
 if __name__ == "__main__":
     put_entry(get_recipe(get_entry()))
-
-##unit test code : get_entry method
-#    print get_entry()
-
-##unit test code : get_recipe method
-##recipe id:1121500/1317264/1373581/1661
-#    print 'test of get_recipe'
-#    print get_recipe('cookpad.com/recipe/1661')
-
-##unit test code : put_entry method
-#    row = {'largecategory_id': '123',
-#           'largecategory_name': u'ふがふが',
-#           'smallcategory_id': '456',
-#           'smallcategory_name': u'ららら',
-#           'photo_url': 'img6.cookpad.com/recipe/p/1889/858/5BAFC8617E9932B314D6A484BCA8AEDD.jpg?1273502049',
-#           'tsukurepo_count': 516,
-#           'description': u'ほげほげ',
-#           'entry_url': 'cookpad.com/recipe/252807'}
-#    put_entry(row)
-
-##unit test code : get_resizedimage method
-#    print get_resizedimage('img7.cookpad.com/recipe/p/373/786/D936E58B7B6230D5B65A2EE6CA1DE452.jpg?1292597022',100,100)
-
-##unit test code : get_category method
-#    get_category('112',u'あああ',datastores.LargeCategories)

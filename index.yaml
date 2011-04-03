@@ -31,6 +31,33 @@ indexes:
 - kind: Entries
   properties:
   - name: category1_id
+  - name: hateb_added_date
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category1_id
+  - name: season
+  - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category1_id
+  - name: season
+  - name: hateb_added_date
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category1_id
+  - name: season
+  - name: tsukurepo_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category1_id
   - name: season
   - name: year
   - name: bukuma_count
@@ -55,6 +82,13 @@ indexes:
   - name: category1_id
   - name: year
   - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category1_id
+  - name: year
+  - name: hateb_added_date
     direction: desc
 
 - kind: Entries
@@ -73,6 +107,54 @@ indexes:
 - kind: Entries
   properties:
   - name: category2_id
+  - name: hateb_added_date
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: season
+  - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: season
+  - name: hateb_added_date
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: season
+  - name: tsukurepo_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: tsukurepo_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: year
+  - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: year
+  - name: hateb_added_date
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: category2_id
+  - name: year
   - name: tsukurepo_count
     direction: desc
 
@@ -80,6 +162,12 @@ indexes:
   properties:
   - name: season
   - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: season
+  - name: hateb_added_date
     direction: desc
 
 - kind: Entries
@@ -106,6 +194,12 @@ indexes:
   properties:
   - name: year
   - name: bukuma_count
+    direction: desc
+
+- kind: Entries
+  properties:
+  - name: year
+  - name: hateb_added_date
     direction: desc
 
 - kind: Entries

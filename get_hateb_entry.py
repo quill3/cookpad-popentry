@@ -109,21 +109,3 @@ if __name__ == "__main__":
             upcount = 0
             break
     put_counter(upcount)
-
-
-##unit test code : get_counter method
-#    print str(get_counter())
-
-##unit test code : get_entrylist method
-#    print 'test of get_entrylist'
-#    print get_entrylist('http://cookpad.com/recipe/')
-
-##unit test code : put_entry method
-#    row = {'bukuma_count': 151,
-#           'hateb_added_date': datetime.datetime(2008, 7, 21, 0, 0),
-#           'entry_title': u'エントリータイトル',
-#           'entry_url': 'http://cookpad.com/recipe/252807'}
-#    put_entry(row)
-
-##unit test code : put_counter method
-#    put_counter(0)

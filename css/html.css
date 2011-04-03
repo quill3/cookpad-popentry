@@ -24,13 +24,36 @@ h1, h2, h3, h4, h5, h6, p, dl {
 h1 {   
   clear: both;
   font: 400 1.0em georgia, serif;
-  color: #532406;  
+  color: #532406;
+}
+
+h1 a {
+  text-decoration: none;
+}
+
+h1 a:link,
+h1 a:visited,
+h1 a:hover
+ {
+  color: #532406;
 }
 
 h2 {
   clear: both;
   font: 400 1.0em georgia, serif;
   color: #61804E;
+}
+
+.search {
+  padding-left:30px;
+  font-size: 90%;
+  color: #000000;
+  background-color: #F1FFE3;
+}
+
+.searchbutton {
+  text-align: center;
+  background-color: #F1FFE3;
 }
 
 .result {
@@ -55,7 +78,20 @@ h2 {
 
 .category {
   font-size: 80%;
-  color: #000000;
+}
+
+.category a {
+  text-decoration: none;
+}
+
+.category a:link,
+.category a:visited {
+  color: #590000;
+}
+
+.category a:hover {
+  color: #590000;
+  text-decoration: underline;
 }
 
 .timestamp {
@@ -69,10 +105,20 @@ h2 {
   line-height: 1.5;
 }
 
+.pager a:link,
+.pager a:visited {
+  color: blue;
+}
+
+.pager a:hover {
+  color: #ff0000;
+  text-decoration: underline;
+}
+
 .footer {
-  font-size: small;
+  font-size: 70%;
   color: #888888;
-  font-style: italic;
-  text-align: right;
+  line-height: 1.5;
+  text-align: left;
   padding:2em 0px;
 }
