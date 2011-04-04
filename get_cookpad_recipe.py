@@ -30,10 +30,14 @@ def get_recipe(url):
         if not parse_results1:
             parse_results1 = ['']
 
-        pattern = re.compile(r'<meta name="description" content="(.*?)" />')
+        # pattern = re.compile(r'<meta name="description" content="(.*?)" />')
+
+        pattern = re.compile('''<div id="description" class="font14 summary">(.*?)<div class="right">''',re.S)
         parse_results2 = pattern.findall(get_result.content)
         if not parse_results2:
             parse_results2 = ['']
+        else:
+            parse_results2[0] = parse_results2[0].strip()
 
         pattern = re.compile(r'<span class="tsukurepo_count">(.*?)</span>')
         parse_results3 = pattern.findall(get_result.content)
