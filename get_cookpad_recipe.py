@@ -25,12 +25,10 @@ def get_recipe(url):
     get_result = urlfetch.fetch(recipe_url,deadline=10)
 
     if get_result.status_code == 200:
-        pattern = re.compile(r'<img alt="メイン画像" class="photo" src="http://(.*?)"')
+        pattern = re.compile(r'class="photo" src="http://(.*?)"')
         parse_results1 = pattern.findall(get_result.content)
         if not parse_results1:
             parse_results1 = ['']
-
-        # pattern = re.compile(r'<meta name="description" content="(.*?)" />')
 
         pattern = re.compile('''<div id="description" class="font14 summary">(.*?)<div class="right">''',re.S)
         parse_results2 = pattern.findall(get_result.content)
@@ -54,7 +52,6 @@ def get_recipe(url):
         parse_results2 = ['']
         parse_results3 = ['0']
         parse_results4 = [('',''),('',''),('','')]
-        parse_results5 = [('','')]
 
     return {'entry_url':url,
             'photo_url':parse_results1[0],
@@ -75,9 +72,11 @@ def put_entry(row):
     entry = query.get()
 
     if not entry.photo_url == row['photo_url']:
-        entry.photo_url = row['photo_url']
-        entry.photo_image = get_resizedimage(row['photo_url'],100,100)
-    entry.description = row['description']
+        if row['photo_url'] != "":
+            entry.photo_url = row['photo_url']
+            entry.photo_image = get_resizedimage(row['photo_url'],100,100)
+    if row['description'] != "":
+        entry.description = row['description']
     entry.tsukurepo_count = row['tsukurepo_count']
     if row['category1_id']:
         put_category(row['category1_id'],row['category1_name'],'1')
