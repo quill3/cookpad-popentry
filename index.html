@@ -97,14 +97,14 @@
 				{% endfor %}
 					<span class="floatLeft"><span class="pager">
 				{% ifnotequal pager.prev_offset -1 %}
-					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.prev_offset }}">
+					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.prev_offset }}" rel="nofollow">
 						<=前のページヘ
 					</a>
 				{% endifnotequal %}
 					</span></span>
 					<span class="floatRight"><span class="pager">
 				{% ifnotequal pager.next_offset -1 %}
-					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.next_offset }}">
+					<a href="?category={{ inputparm.category1_id }}{{ inputparm.category2_id }}&year_or_season={{ inputparm.year }}{{ inputparm.season }}&sort={{ inputparm.sort }}&offset={{ pager.next_offset }}" rel="nofollow">
 						次のページヘ=>
 					</a>
 				{% endifnotequal %}

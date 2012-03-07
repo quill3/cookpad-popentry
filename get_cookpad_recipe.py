@@ -37,7 +37,7 @@ def get_recipe(url):
         else:
             parse_results2[0] = parse_results2[0].strip()
 
-        pattern = re.compile(r'<span class="tsukurepo_count">(.*?)</span>')
+        pattern = re.compile(r"<span class='tsukurepo_count'>(.*?)</span>")
         parse_results3 = pattern.findall(get_result.content)
         if not parse_results3:
             parse_results3 = ['0']
