@@ -4,6 +4,7 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
+from google.appengine.api import memcache
 
 import os
 import datetime
@@ -21,7 +22,7 @@ class MainPage(webapp.RequestHandler):
         gqlsentence = make_gqlsentence(checkedparm)
         query = datastores.Entries.gql(gqlsentence)
 
-        limit = 25
+        limit = 10
         offset = int(checkedparm['offset'])
         fetched_entries = query.fetch(limit,offset)
 
@@ -70,10 +71,21 @@ def get_showparm():
                 'season' : season,
                 'sort' : sort}
 
+# def get_categorylist(kubun):
+    # query = datastores.Categories.gql("WHERE category_kubun = '" + kubun + "' ORDER BY hit_count DESC")
+    # fetched_categories = query.fetch(150)
+    # return [[c.category_id,c.category_name] for c in fetched_categories]
+
 def get_categorylist(kubun):
-    query = datastores.Categories.gql("WHERE category_kubun = '" + kubun + "' ORDER BY hit_count DESC")
-    fetched_categories = query.fetch(150)
-    return [[c.category_id,c.category_name] for c in fetched_categories]
+    data = memcache.get(kubun)
+    if data is not None:
+        return data
+    else:
+        query = datastores.Categories.gql("WHERE category_kubun = '" + kubun + "' ORDER BY hit_count DESC")
+        fetched_categories = query.fetch(150)
+        data = [[c.category_id,c.category_name] for c in fetched_categories]
+        memcache.add(kubun, data, 86400)
+        return data
 
 def check_parm(inputparm,showparm):
     checkedparm = {}
@@ -104,9 +116,10 @@ def check_parm(inputparm,showparm):
                     checkedparm[k] = v
                     break
         elif k == 'offset':
-#offsetは半角数字のみ
+#offsetは半角数字のみ（表示制限：５０件まで）
             if is_num(v):
-                checkedparm[k] = v
+                if int(v) <= 40:
+                    checkedparm[k] = v
         elif k == 'year_or_season':
 #year,seasonはshowparmと一致していること
             if is_num(v):
@@ -151,7 +164,8 @@ def make_pager(limit,offset,fetched_count):
     if offset >= limit:
         pager['prev_offset'] = offset - limit
     if fetched_count >= limit:
-        pager['next_offset'] = offset + limit
+        if offset < 40:
+            pager['next_offset'] = offset + limit
     return pager
 
 
