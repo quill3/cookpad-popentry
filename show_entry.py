@@ -46,7 +46,6 @@ class ThumbNail (webapp.RequestHandler):
         else:
             self.error(404)
 
-
 def get_inputparm(self):
     inputparm = {}
     for p in ['category','year_or_season','sort','offset']:
