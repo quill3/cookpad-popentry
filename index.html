@@ -23,8 +23,8 @@
 					<h2><span class="highlight">クックパッドの人気レシピ集（自動更新中／条件指定検索可）</span></h2>
 					<br>
 					<a href="http://b.hatena.ne.jp/entry/http%3A%2F%2Fcookpad-popentry.appspot.com%2F" class="hatena-bookmark-button" data-hatena-bookmark-title="%E3%82%AF%E3%83%83%E3%82%AF%E3%83%91%E3%83%83%E3%83%89%E4%BA%BA%E6%B0%97%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-					<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="ja">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 					<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fcookpad-popentry.appspot.com%2F&amp;layout=button_count&amp;show_faces=false&amp;width=90&amp;action=like&amp;colorscheme=light&amp;height=20" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:20px;" allowTransparency="true"></iframe>
+					<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://cookpad-popentry.appspot.com/" data-text="クックパッド人気エントリー" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 				</div>
 				<div id="page">
 					<form method="get" action="">
@@ -71,6 +71,21 @@
 						<p class="searchbutton"><input type="submit" value="クックパッド人気エントリー検索"></p>
 					</p>
 					</form>
+					<div class="ad">
+					スポンサードリンク
+					<script type="text/javascript"><!--
+					google_ad_client = "ca-pub-3393081877457267";
+					/* cookpad */
+					google_ad_slot = "1052855349";
+					google_ad_width = 468;
+					google_ad_height = 60;
+					//-->
+					</script>
+					<script type="text/javascript"
+					src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+					</script>
+					</div>
+					<br>
 				{% for entry in entries %}
 					<span class="result"><a href="http://{{ entry.entry_url }}" target="_blank">{{ entry.entry_title }}</a></span>
 					<br>
@@ -93,6 +108,23 @@
 					{{ entry.description }}
 					</p>
 					<p class="clear_float"></p> 
+					{% ifequal forloop.counter 5 %}
+					<div class="ad">
+					スポンサードリンク
+					<br>
+					<script type="text/javascript"><!--
+					google_ad_client = "ca-pub-3393081877457267";
+					/* cookpad_middle */
+					google_ad_slot = "2839111483";
+					google_ad_width = 336;
+					google_ad_height = 280;
+					//-->
+					</script>
+					<script type="text/javascript"
+					src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+					</script>
+					</div>
+					{% endifequal %}
 					<br>
 				{% endfor %}
 					<span class="floatLeft"><span class="pager">
@@ -110,14 +142,28 @@
 				{% endifnotequal %}
 					</span></span>
 					<p class="clear_float"></p> 
+					<div class="ad">
+					スポンサードリンク
+					<script type="text/javascript"><!--
+					google_ad_client = "ca-pub-3393081877457267";
+					/* cookpad */
+					google_ad_slot = "1052855349";
+					google_ad_width = 468;
+					google_ad_height = 60;
+					//-->
+					</script>
+					<script type="text/javascript"
+					src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+					</script>
+					</div>
 					<div class="footer">
-						<a href="http://code.google.com/intl/ja/appengine/" target="_blank"><img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Powered by Google App Engine"  border="0"/></a>
-						<br>
 						このWebサービスは<a href="http://d.hatena.ne.jp/quill3/" target="_blank" >quill3</a>が趣味で作りました。
 
 						（<a href="http://github.com/quill3/cookpad-popentry" target="_blank" >ソースコード</a>と<a href="http://d.hatena.ne.jp/quill3/archive?word=%2A%5B%A5%AF%A5%C3%A5%AF%A5%D1%A5%C3%A5%C9%BF%CD%B5%A4%A5%A8%A5%F3%A5%C8%A5%EA%A1%BC%5D" target="_blank" >開発記録</a>を公開しています。）
 						<br>
 						姉妹サイトの<a href="http://2ch-hotentry.appspot.com/" target="_blank" >2chまとめホットエントリー</a>もよろしくお願いします。
+						<br>
+						<a href="http://code.google.com/intl/ja/appengine/" target="_blank"><img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Powered by Google App Engine"  border="0"/></a>
 					</div>
 				</div>
 			</div>
